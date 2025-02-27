@@ -1,0 +1,54 @@
+<div class="d-flex flex-row m-4 flex-wrap">
+
+  <div 
+     *ngFor="let chan of localCman$ | async"
+     class="card m-3 text-center border-3"
+     ngbTooltip="Click to scan/unscan"
+     placement="bottom"
+     style="width:100px; cursor:pointer"
+     (click)="clickSubject$.next(chan)"
+     [style.border-color]="getColorForTime(chan.cman.ts, 0, 60)">
+
+    <div class="card-body fs-2">
+      <div>
+        {{chan.cman.chan}}
+      </div>
+      <span *ngIf="chan.icon" 
+         class="  badge 
+                  rounded-pill 
+                  bg-primary 
+                  fs-6 
+                  position-absolute 
+                  top-100 
+                  start-100 
+                  translate-middle">
+        <i class="bi {{chan.icon}}"></i>
+      </span>
+      <span 
+           class="fs-6 badge bg-secondary position-absolute top-0 start-100 rounded-pill translate-middle">
+        {{ chanToFreq(chan.cman.chan) }}
+      </span>
+
+    </div>
+
+  </div>
+
+  <div 
+           class="card m-3 text-center border-3"
+           ngbTooltip="Click to add channel."
+           placement="bottom"
+           style="width:100px; cursor:pointer">
+
+    <div class="card-body fs-2">
+        <input type="text"
+               #newChanAdd
+               placeholder="+"
+               [(ngModel)]="newChanValue"
+               (blur)="submitAddChannel()"
+               class="channel-input" 
+               (keydown.enter)="submitAddChannel()" />
+
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,81 @@
+<div 
+  [cdkContextMenuTriggerFor]="grpMenu"
+  class="card m-4">
+
+  <div 
+    class="card-header">
+    <h3>
+      <input
+          class="grp-input"
+    type="text"
+    [(ngModel)]="header"
+    (keydown.enter)="saveHeader()"
+      >
+    </h3>
+  </div>
+
+  <div class="card-body">
+    <div class="d-flex m-4 flex-wrap justify-content-center beacon-group"
+          [class.limit-width]="!fullWidth">
+      @for (beacon of beacons; track beacon.bssid) {
+      <app-beacon-component
+          [cdkContextMenuTriggerFor]="context_menu"
+          [cdkContextMenuTriggerData]="{ $implicit: beacon }"
+          (cdkContextMenuOpened)="openContext(beacon)"
+          (click)="click(beacon)" 
+          [beacon]="beacon"></app-beacon-component>
+      }
+
+      <div *ngIf="addingMAC">
+        <div
+            class="card m-2 text-bg-light border-3">
+            <div class="card-header d-flex">
+              <h4 class="me-auto">
+                  <input
+                      class="grp-input"
+                      type="text"
+                      [(ngModel)]="addedMAC"
+                      placeholder="Add MAC Here"
+                      (blur)="addingMAC=false"
+                      (keydown.enter)="saveNewMAC()"
+                      >
+              </h4>
+            </div>
+            <div class="card-body">
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<ng-template #grpMenu let-beacon>
+  <div class="dropdown-menu show" cdkMenu>
+    <button class="dropdown-item" (click)="deleteGroup()" cdkMenuItem>Delete</button>
+    <button class="dropdown-item" (click)="addingMAC=true; addedMAC=''" cdkMenuItem>Add by mac</button>
+    <button class="dropdown-item" (click)="resetCounts()" cdkMenuItem>Reset Counts</button>
+  </div>
+</ng-template>
+
+<ng-template #context_menu let-beacon>
+  <div cdkMenu class="dropdown-menu show">    
+    <button cdkMenuItem 
+            [cdkMenuTriggerFor]="addToGroup"
+            class="dropdown-item">Add to group</button>                         
+    <button cdkMenuItem (click)="rmFromGrp()" 
+      class="dropdown-item">Remove from group</button>                         
+    <button class="dropdown-item" (click)="resetCount(beacon)" cdkMenuItem>Reset Count</button>
+  </div>                                                                                
+</ng-template>
+
+
+<ng-template #addToGroup let-beacon>
+  <div class="dropdown-menu show" cdkMenu>
+    <button 
+      *ngFor="let addGrp of ctxt.addGrps" 
+      class="dropdown-item" (click)="addToGrp(addGrp)" cdkMenuItem>{{addGrp}}</button>
+    <button 
+      class="dropdown-item" (click)="addToGrp('New Group')" cdkMenuItem>New Group</button>
+  </div>
+</ng-template>

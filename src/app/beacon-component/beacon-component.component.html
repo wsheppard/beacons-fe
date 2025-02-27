@@ -1,0 +1,35 @@
+
+
+<div
+  class="card m-2 text-bg-light border-3" 
+  [style.border-color]="getColorForTime(beacon.age, 0, 60)" style="width: 18rem;">
+  <div class="card-header d-flex">
+    <h4 class="me-auto">{{beacon.bssid}}</h4>
+    <div>
+    <h2 (click)="grabInfo($event)" class="bi bi-info-square"></h2>
+    </div>
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">{{beacon.ssid || "NULL"}}</h5>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">LastSeen: {{ageFormat()}}</li>
+      <li class="list-group-item">Beacons: {{beacon.beacons}}</li>
+      <li class="list-group-item">DSS: {{beacon.channel}} CAP:{{beacon.freq}}</li>
+      <li class="list-group-item">dBm: {{beacon.dbm}}</li>
+      <li *ngIf="beacon.rsn" class="list-group-item">RSN
+        <span *ngFor="let item of beacon.rsn.pairwise_cipher_suites" class="badge text-bg-warning ms-1">{{item.repr.cipher}}</span>
+      </li>
+      <li *ngIf="beacon.wpa" class="list-group-item">WPA
+        <span *ngFor="let item of beacon.wpa.pairwise_cipher_suites" class="badge text-bg-primary ms-1">{{item.repr.cipher}}</span>
+      </li>
+      <li class="list-group-item">
+        <span *ngIf="beacon.ibss" class="badge text-bg-info">IBSS</span>
+        <span *ngIf="beacon.ht" class="badge text-bg-success ms-1">HT</span>
+        <span *ngIf="beacon.vht" class="badge text-bg-success ms-1">VHT</span>
+        <span *ngIf="beacon.he" class="badge text-bg-success ms-1">HE</span>
+      </li>
+      <!-- <li *ngFor="let ven of beacon.vendorie|keyvalue"  class="list-group-item">{{ven.value}}</li> -->
+    </ul>
+  </div>
+</div>
+

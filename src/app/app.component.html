@@ -1,0 +1,29 @@
+<div class="container-fluid p-1">
+
+  <app-channel-bar></app-channel-bar>
+
+  <div class="d-flex flex-wrap">
+
+    @for( group of groupedBeacons$ | async | keyvalue; track group.key ){ 
+    <app-beacon-group
+      class="beacon-group"
+       [header]="group.key"
+       (beaconClick)="beaconClick($event)"
+       [beacons]="group.value">
+    </app-beacon-group>
+    }
+
+    
+   <app-beacon-group 
+       [beacons] = "(remainingBeacons$ | async) || []"
+       [fullWidth] = "true" 
+       [header]="'All Beacons'">
+   </app-beacon-group>
+
+
+  </div>
+
+
+</div>
+
+
